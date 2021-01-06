@@ -3,6 +3,7 @@ Projeto faz parte do curso REST com ASP.NET Core WebAPI com a adição de um pro
 Neste curso foram apresentados conceitos de uma API REST trabalhando os verbos GET, POST, PUT, DELETE até entregarmos uma API FULL REST.
 
 ## Onde pudemos ver:
+* Ogranização do código
 * Rotas
 * Action Results e Formatadores de Respostas
 * CRUD 
@@ -16,11 +17,17 @@ Neste curso foram apresentados conceitos de uma API REST trabalhando os verbos G
 * Documentação
 * Log 
 * Deploy (IIS Local, SelfHosting e Azure)
+* Monitoramento da saúde da API
+* Injeção de dependência
 
 
 ## Para a implementação usamos os pacotes:
 
-1. Entity Framework
-1. xx
-
-
+1. HealthChecks
+1. Identity
+1. Versioning
+1. Entity Framework Core
+1. Swagger
+1. FluentValidation
+1. xUnit
+1. Newtonsoft
