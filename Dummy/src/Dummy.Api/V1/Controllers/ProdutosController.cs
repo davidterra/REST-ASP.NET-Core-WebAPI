@@ -136,7 +136,7 @@ namespace Dummy.Api.V1.Controllers
 
             var imageDataByteArray = Convert.FromBase64String(arquivo);
 
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imgNome);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot\images", imgNome);
 
             if (System.IO.File.Exists(filePath))
             {

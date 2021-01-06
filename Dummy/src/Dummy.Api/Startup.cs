@@ -17,10 +17,21 @@ namespace Dummy.Api
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+
+        public IWebHostEnvironment WebHostEnvironment { get; }
+
+        public Startup(IWebHostEnvironment env)
         {
-            Configuration = configuration;
+            WebHostEnvironment = env;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+            Configuration = builder.Build();
         }
+
+        //public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -52,26 +63,6 @@ namespace Dummy.Api
                 .AddCheck("Produtos", new SqlServerHealthCheck(connectionString))
                 .AddSqlServer(connectionString, name: "DataBase");
 
-            //services.AddHealthChecksUI()
-            //    .AddInMemoryStorage();
-
-
-            //var retryPolicy = HttpPolicyExtensions
-            //    .HandleTransientHttpError()
-            //    .Or<TimeoutRejectedException>()
-            //    .RetryAsync(5);
-
-            //services.AddHttpClient("uri-group") //default healthcheck registration name for uri ( you can change it on AddUrlGroup )                
-            //    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler()
-            //    {
-            //        ClientCertificateOptions = ClientCertificateOption.Manual,
-            //        ServerCertificateCustomValidationCallback = (httpRequestMessage, cert, cetChain, policyErrors) =>
-            //        {
-            //            return true;
-            //        }
-            //    });
-
-
             services.AddHealthChecksUI(setup =>
             {
                 setup.UseApiEndpointHttpMessageHandler(sp =>
@@ -94,10 +85,10 @@ namespace Dummy.Api
                 app.UseDeveloperExceptionPage();
             }
             else
-            {
+            {                
                 app.UseHsts();
             }
-            
+
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseMvcConfiguration();
@@ -112,23 +103,8 @@ namespace Dummy.Api
                     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                 });
                 endpoints.MapHealthChecksUI();
-                
+
             });
-
-
-
-            //app.UseHealthChecks("/api/hc", new HealthCheckOptions()
-            //{
-            //    Predicate = _ => true,
-            //    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            //});
-
-            //app.UseHealthChecksUI(options =>
-            //{
-            //    options.UIPath = "/api/hc-ui";
-            //});
-
-            
 
         }
     }
